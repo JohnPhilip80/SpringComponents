@@ -99,3 +99,18 @@ public void deleteStudent(Long rno) {
 }
 
 
+
+
+
+package com.dsu.john.student.controllers;
+
+import org.springframework.web.bind.annotation.GetMapping;
+
+public class StudentUIController {
+	@GetMapping("/")
+	public String showHomePage() {
+		return "student/home";
+	}
+}
+
+
