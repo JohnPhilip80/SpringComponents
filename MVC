@@ -27,6 +27,9 @@ public class StudentService {
 	
 	public List<Student> readAllStudents(){
 		return repo.readAllStudents();
+	} 
+	public void createStudent(Student student){
+		repo.createStudent(student);
 	}
 }
 
