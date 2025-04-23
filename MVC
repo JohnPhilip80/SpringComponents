@@ -21,7 +21,10 @@ public class StudentController {
 		service.updateStudent(student);
 		return "Success";
 	}
-
+@DeleteMapping("deletestudent/{id}")
+	public void deleteStudent(@PathVariable ("rno") Long rno){
+		service.deleteStudent(rno);
+	}
 
 }
 
@@ -42,9 +45,12 @@ public class StudentService {
 	public void createStudent(Student student){
 		repo.createStudent(student);
 	}
-public void updateStudent(Student student) {
+	public void updateStudent(Student student) {
 		repo.updateStudent(student);
 		}
+	public void deleteStudent(Long rno){
+	repo.delete(rno);
+	}
 }
 
 
