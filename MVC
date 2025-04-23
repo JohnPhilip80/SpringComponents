@@ -1,0 +1,57 @@
+Controller
+
+@RestController
+public class StudentController {
+	private StudentService service;
+	public StudentController() {
+		service = new StudentService();
+	}
+	@GetMapping("studentlist")
+	public List<Student> showAllStudents() {
+		
+		return service.readAllStudents();
+	} 
+}
+
+
+Service
+
+
+public class StudentService {
+	private StudentRepository repo;
+	
+	public StudentService(){
+		repo = new StudentRepository();
+	}
+	
+	public List<Student> readAllStudents(){
+		return repo.readAllStudents();
+	}
+}
+
+
+Repository
+
+public class StudentRepository {
+
+	private List<Student> students;
+	
+	
+	public StudentRepository() {
+		students = new ArrayList<Student>(Arrays.asList(
+				new Student(1L,"Siva","Java",85.5),
+				 new Student(2L,"Murugan","Spring Boot",76.5),
+				 new Student(3L,"Saraswathi",".NET",59.5),
+				 new Student(4L,"Raman","HTML",90.5)
+				));
+	}
+	public List<Student> readAllStudents(){
+		return students;
+	}
+	
+	
+	
+	
+}
+
+
