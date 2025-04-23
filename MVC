@@ -85,6 +85,16 @@ public class StudentRepository {
 		}
 		students.set(index, student);
 	}
+public void deleteStudent(Long rno) {
+		int index = 0;
+		for(int i=0;i<students.size();i++) {
+			if(students.get(i).getRollNo() == rno) {
+				index = i;
+			}
+		}
+		students.remove(index);
+		
+	}
 	
 }
 
