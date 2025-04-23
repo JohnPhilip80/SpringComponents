@@ -21,7 +21,7 @@ public class StudentController {
 		service.updateStudent(student);
 		return "Success";
 	}
-@DeleteMapping("deletestudent/{id}")
+@DeleteMapping("deletestudent/{rmp}")
 	public void deleteStudent(@PathVariable ("rno") Long rno){
 		service.deleteStudent(rno);
 	}
