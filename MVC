@@ -48,7 +48,9 @@ public class StudentRepository {
 	public List<Student> readAllStudents(){
 		return students;
 	}
-	
+	public void createStudent(Student student) {
+		students.add(student);
+		}
 	
 	
 	
