@@ -111,6 +111,10 @@ public class StudentUIController {
 	public String showHomePage() {
 		return "student/home";
 	}
+@GetMapping("/showstudents")
+	public String showStudents() {
+		return "student/showStudents";
+	}
 }
 
 
