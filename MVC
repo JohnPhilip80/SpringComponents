@@ -11,6 +11,11 @@ public class StudentController {
 		
 		return service.readAllStudents();
 	} 
+	@PostMapping("createstudent")
+	public String createStudent(@RequestBody Student student) {
+		service.createStudent(student);
+		return "Success";
+	}
 
 }
 
