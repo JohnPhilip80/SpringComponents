@@ -16,6 +16,12 @@ public class StudentController {
 		service.createStudent(student);
 		return "Success";
 	}
+@PutMapping("updatestudent")
+	public String updateStudent(@RequestBody Student student) {
+		service.updateStudent(student);
+		return "Success";
+	}
+
 
 }
 
@@ -36,6 +42,9 @@ public class StudentService {
 	public void createStudent(Student student){
 		repo.createStudent(student);
 	}
+public void updateStudent(Student student) {
+		repo.updateStudent(student);
+		}
 }
 
 
