@@ -146,7 +146,7 @@ public class StudentUIController {
 					<td th:text="${student.price}"></td>
 					<td>
 						<a th:href="@{/student/updatestudent(rno=${student.rno})}">Edit</a>
-						<a th:href="@{/student/deletestudent(rno=${student.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+						<a th:href="@{/student/deletestudent(rno=${student.rno})}" onclick="return confirm('Are you sure?')">Delete</a>
 					</td>
 				</tr>
 			</tbody>
