@@ -218,7 +218,7 @@ public class StudentUIController {
 		return "student/home";
 	}
 	@GetMapping("/showstudents")
-	public String showStudents() {
+	public String showStudents(Model model) {
 		List<Student> students = service.readAllStudents();
 		model.addAttribute("students",students);
 		return "student/showStudents";
