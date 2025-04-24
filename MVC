@@ -444,3 +444,47 @@ import com.dsu.john.student.models.Student;
 public interface StudentRepositoryDB extends JpaRepository<Student,Long>  {
 	public Student getByRno(Long rno);
 }
+
+
+
+
+
+package com.dsu.john.student.services;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.dsu.john.student.models.Student;
+import com.dsu.john.student.repositories.StudentRepository;
+import com.dsu.john.student.repositories.StudentRepositoryDB;
+@Service
+public class StudentService {
+	
+	@Autowired
+	private StudentRepositoryDB repo;
+	
+	public StudentService(){
+		
+	}
+	
+	public List<Student> readAllStudents(){
+		//return repo.readAllStudents();
+		return repo.findAll();
+	}
+	public void createStudent(Student student) {
+		repo.save(student);
+		}
+	public void updateStudent(Student student) {
+		repo.save(student);
+		}
+
+	public void deleteStudent(Long rno) {
+		repo.delete(rno);
+		
+	}
+	public Student getByRno(Long rno) {
+		return repo.getByRno(rno);
+	}
+}
