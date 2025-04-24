@@ -205,6 +205,7 @@ CONTROLLER
 
 package com.dsu.john.student.controllers;
 import com.dsu.john.student.models.Student;
+import com.dsu.john.student.models.StudentDto;
 import com.dsu.john.student.services.StudentService;
 import java.util.List;
 import org.springframework.stereotype.Controller;
@@ -239,24 +240,24 @@ public class StudentUIController {
 		//model.addAttribute("studentDto",studentDto);
 		return "student/createStudent";
 	}
-	/*@PostMapping("/createstudent")
+	@PostMapping("/createstudent")
 	public String createStudent(@ModelAttribute StudentDto studentDto) {
 		Student student = new Student();
-		student.setRno(studentDto.getrnl());
+		student.setRno(studentDto.getRno());
 		student.setName(studentDto.getName());
 		student.setCourse(studentDto.getCourse());
 		student.setPercentage(studentDto.getPercentage());
-		service.create(student);
+		service.createStudent(student);
 		return "redirect:/ui/showstudents";
 	}
-	@GetMapping("/updatestudent")
+	/*@GetMapping("/updatestudent")
 	public String updateStudent(Model model,@RequestParam("rno") Long rno) {
-			Student student = service.getByRno(id);
+			Student student = service.getByRno(rno);
 			StudentDto studentDto = new StudentDto();
 			studentDto.setRno(student.getRno());
 			studentDto.setName(student.getName());
 			studentDto.setCourse(student.getCourse());
-			studentDto.setgetPercentage(student.getPercentage());
+			studentDto.setPercentage(student.getPercentage());
 			model.addAttribute("studentDto",studentDto);
 			return "student/updateStudent";
 	}
