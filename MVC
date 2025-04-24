@@ -219,6 +219,8 @@ public class StudentUIController {
 	}
 	@GetMapping("/showstudents")
 	public String showStudents() {
+		List<Student> students = service.readAllStudents();
+		model.addAttribute("students",students);
 		return "student/showStudents";
 	}
 	
