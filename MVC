@@ -93,32 +93,184 @@ public void deleteStudent(Long rno) {
 			}
 		}
 		students.remove(index);
-		
-	}
-	
+		}
+}
+
+MODELS
+package com.cca.john.student.models;
+public class Student {
+	private Long rno;
+	private String name;
+	private String course;
+	private Double percentage;
+}
+package com.cca.john.student.models;
+public class StudentDto {
+	private Long rno;
+	private String name;
+	private String course;
+	private Double percentage;
 }
 
 
+REPOSITORY
+
+package com.cca.john.student.repositories;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.stereotype.Repository;
+import com.cca.john.student.models.Student;
 
 
+public class StudentRepository {
+	private List<Student> students;
+	public StudentRepository() {
+		students = new ArrayList<Student>(Arrays.asList(
+				new Student(1L,"Siva","Java",85.5),
+				 new Student(2L,"Murugan","Spring Boot",76.5),
+				 new Student(3L,"Saraswathi",".NET",59.5),
+				 new Student(4L,"Raman","HTML",90.5)
+				));
+	}
+	public List<Student> readAllStudents(){
+		return students;
+	}
+	public void createStudent(Student student) {
+		students.add(student);
+	}
+	public void updateStudent(Student student) {
+		int index = 0;
+		for(int i=0;i<students.size();i++) {
+			if(students.get(i).getRollNo() == student.getRollNo()) {
+				index = i;
+			}
+		}
+		students.set(index, student);
+	}
+	public void deleteStudent(Long rno) {
+		int index = 0;
+		for(int i=0;i<students.size();i++) {
+			if(students.get(i).getRollNo() == rno) {
+				index = i;
+			}
+		}
+		students.remove(index);
+	}
+	public Student getStudentByRno(Long rno){
+		int index = 0;
+		for(int i=0;i<students.size();i++) {
+			if(students.get(i).getRollNo() == rno) {
+				index = i;
+			}
+		}
+		return students.get(index);
+	}
+}
+
+SERVICES
+
+package com.cca.john.student.services;
+
+import java.util.List;
+import org.springframework.stereotype.Service;
+import com.cca.john.student.models.Student;
+import com.cca.john.student.repositories.StudentRepository;
+
+
+public class StudentService {
+	private StudentRepository repo;
+	public StudentService(){
+		repo= new StudentRepository();
+	}
+	public List<Student> readAllStudents() {
+		return repo.readAllIStudents();
+	}
+	public void createStudent(Student student) {
+		repo.createStudent(student);
+	}
+	public void updateStudent(Student student) {
+		repo.updateStudent(student);
+	}
+	public void deleteStudent(Long rno) {
+		repo.deleteStudent(rno);
+	}
+	public BookLS getStudentByRno(Long id) {
+		return repo.getStudentByRno(id);
+	}
+}
+
+
+CONTROLLER
 
 package com.dsu.john.student.controllers;
+import com.dsu.john.student.services.StudentService;
 
 import org.springframework.web.bind.annotation.GetMapping;
-
+@Controller
+@RequestMapping("/ui")
 public class StudentUIController {
+	public StudentUIController(){
+		StudentService service = new StudentService();
+	}
 	@GetMapping("/")
 	public String showHomePage() {
 		return "student/home";
 	}
-@GetMapping("/showstudents")
+	@GetMapping("/showstudents")
 	public String showStudents() {
 		return "student/showStudents";
 	}
+	
+	@GetMapping("/createstudent")
+	public String createStudent(Model model) {
+		StudentDto studentDto = new StudentDto();
+		model.addAttribute("studentDto",studentDto);
+		return "student/createStudent";
+	}
+	@PostMapping("/createstudent")
+	public String createStudent(@ModelAttribute StudentDto studentDto) {
+		Student student = new Student();
+		student.setRno(studentDto.getrnl());
+		student.setName(studentDto.getName());
+		student.setCourse(studentDto.getCourse());
+		student.setPercentage(studentDto.getPercentage());
+		service.create(student);
+		return "redirect:/ui/showstudents";
+	}
+	@GetMapping("/updatestudent")
+	public String updateStudent(Model model,@RequestParam("rno") Long rno) {
+			Student student = service.getByRno(id);
+			StudentDto studentDto = new StudentDto();
+			studentDto.setRno(student.getRno());
+			studentDto.setName(student.getName());
+			studentDto.setCourse(student.getCourse());
+			studentDto.setgetPercentage(student.getPercentage());
+			model.addAttribute("studentDto",studentDto);
+			return "student/updateStudent";
+	}
+	@PostMapping("/updatestudent")
+	public String updateStudent(@RequestParam("rno") Long rno, @ModelAttribute StudentDto studentDto) {
+			Student student = service.getByRno(rno);
+			student.setName(studentDto.getName());
+			student.setCourse(studentDto.getCourse());
+			student.setPercentage(studentDto.getPercentage());
+			service.update(student);
+			return "redirect:/ui/showstudents";
+	}
+
+	@GetMapping("/deletestudent")
+	public String deleteStudent(@RequestParam("rno") Long rno) {
+		service.deleteStudent(rno);
+		return "redirect:/ui/showstudents";
+	}
+
 }
 
 
 
+
+SHOW STUDENTS 
 
 <!doctype html>
 <html>
@@ -153,4 +305,82 @@ public class StudentUIController {
 		</table>
 	</body>
 </html>
+
+CREATE STUDENT
+
+<!doctype html>
+<html>
+	<head>
+		<title>DSU Students</title>
+	</head>
+	<body>
+		<h1>New Student</h1>
+		<form method="post" th:object="${studentDto}">
+			<table width = 60%>
+				<tr>
+					<td>Roll No:</td>
+					<td> <input th:field="${studentDto.rno}"></td>
+				</tr>
+				<tr>
+					<td>Name:</td>
+					<td> <input th:field="${studentDto.name}"></td>
+				</tr>
+				<tr>
+					<td>course:</td>
+					<td> <input th:field="${studentDto.course}"></td>
+				</tr>
+				<tr>
+					<td>Percentage:</td>
+					<td> <input th:field="${studentDto.percentage}"></td>
+				</tr>
+				<tr>
+					<td><button type ="submit">Submit</button></td>
+					<td><a  href="/student/studentList">Cancel</a></td>
+				</tr>
+			</table>
+			
+		</form>
+
+	</body>
+</html>
+
+UPDATE STUDENT
+
+<!doctype html>
+<html>
+	<head>
+		<title>DSU Students</title>
+	</head>
+	<body>
+		<h1>Edit Student</h1>
+		<form method="post" th:object="${studentDto}">
+			<table width = 60%>
+				<tr>
+					<td>Roll No:</td>
+					<td> <input readonly th:field="${studentDto.rno}"></td>
+				</tr>
+				<tr>
+					<td>Name:</td>
+					<td> <input th:field="${studentDto.name}"></td>
+				</tr>
+				<tr>
+					<td>Course:</td>
+					<td> <input th:field="${studentDto.course}"></td>
+				</tr>
+				<tr>
+					<td>Percentage</td>
+					<td> <input th:field="${studentDto.percentage}"></td>
+				</tr>
+				<tr>
+					<td><button type ="submit">Submit</button></td>
+					<td><a  href="/student/studentlist">Cancel</a></td>
+				</tr>
+			</table>
+			
+		</form>
+
+	</body>
+</html>
+
+
 
