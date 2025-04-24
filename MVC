@@ -115,16 +115,19 @@ public class StudentDto {
 
 REPOSITORY
 
-package com.cca.john.student.repositories;
-import java.util.ArrayList;
+package com.dsu.john.student.repositories;
+
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.stereotype.Repository;
-import com.cca.john.student.models.Student;
+import java.util.ArrayList;
 
+import com.dsu.john.student.models.Student;
 
 public class StudentRepository {
+
 	private List<Student> students;
+	
+	
 	public StudentRepository() {
 		students = new ArrayList<Student>(Arrays.asList(
 				new Student(1L,"Siva","Java",85.5),
@@ -138,11 +141,12 @@ public class StudentRepository {
 	}
 	public void createStudent(Student student) {
 		students.add(student);
-	}
+		}
 	public void updateStudent(Student student) {
 		int index = 0;
 		for(int i=0;i<students.size();i++) {
-			if(students.get(i).getRollNo() == student.getRollNo()) {
+			if(students.get(i).getRno() == 
+					student.getRno()) {
 				index = i;
 			}
 		}
@@ -151,54 +155,62 @@ public class StudentRepository {
 	public void deleteStudent(Long rno) {
 		int index = 0;
 		for(int i=0;i<students.size();i++) {
-			if(students.get(i).getRollNo() == rno) {
+			if(students.get(i).getRno() == rno) {
 				index = i;
 			}
 		}
 		students.remove(index);
+		
 	}
-	public Student getStudentByRno(Long rno){
+	public Student getByRno(Long rno) {
 		int index = 0;
 		for(int i=0;i<students.size();i++) {
-			if(students.get(i).getRollNo() == rno) {
+			if(students.get(i).getRno() == rno) {
 				index = i;
 			}
 		}
 		return students.get(index);
 	}
+	
+	
 }
+
 
 SERVICES
 
-package com.cca.john.student.services;
+package com.dsu.john.student.services;
 
 import java.util.List;
-import org.springframework.stereotype.Service;
-import com.cca.john.student.models.Student;
-import com.cca.john.student.repositories.StudentRepository;
 
+import com.dsu.john.student.models.Student;
+import com.dsu.john.student.repositories.StudentRepository;
 
 public class StudentService {
 	private StudentRepository repo;
+	
 	public StudentService(){
-		repo= new StudentRepository();
+		repo = new StudentRepository();
 	}
-	public List<Student> readAllStudents() {
-		return repo.readAllIStudents();
+	
+	public List<Student> readAllStudents(){
+		return repo.readAllStudents();
 	}
 	public void createStudent(Student student) {
 		repo.createStudent(student);
-	}
+		}
 	public void updateStudent(Student student) {
 		repo.updateStudent(student);
-	}
+		}
+
 	public void deleteStudent(Long rno) {
 		repo.deleteStudent(rno);
+		
 	}
-	public BookLS getStudentByRno(Long id) {
-		return repo.getStudentByRno(id);
+	public Student getByRno(Long rno) {
+		return repo.getByRno(rno);
 	}
 }
+
 
 
 CONTROLLER
@@ -236,8 +248,9 @@ public class StudentUIController {
 	
 	@GetMapping("/createstudent")
 	public String createStudent(Model model) {
-		//StudentDto studentDto = new StudentDto();
-		//model.addAttribute("studentDto",studentDto);
+		
+		StudentDto studentDto = new StudentDto();
+		model.addAttribute("studentDto",studentDto);
 		return "student/createStudent";
 	}
 	@PostMapping("/createstudent")
@@ -250,7 +263,7 @@ public class StudentUIController {
 		service.createStudent(student);
 		return "redirect:/ui/showstudents";
 	}
-	/*@GetMapping("/updatestudent")
+	@GetMapping("/updatestudent")
 	public String updateStudent(Model model,@RequestParam("rno") Long rno) {
 			Student student = service.getByRno(rno);
 			StudentDto studentDto = new StudentDto();
@@ -267,9 +280,9 @@ public class StudentUIController {
 			student.setName(studentDto.getName());
 			student.setCourse(studentDto.getCourse());
 			student.setPercentage(studentDto.getPercentage());
-			service.update(student);
+			service.updateStudent(student);
 			return "redirect:/ui/showstudents";
-	}*/
+	}
 
 	@GetMapping("/deletestudent")
 	public String deleteStudent(@RequestParam("rno") Long rno) {
@@ -290,8 +303,8 @@ SHOW STUDENTS
 		<title>DSU Students</title>
 	</head>
 	<body>
-		<h1>Student List(LS)</h1>
-		<button onclick="location.href = '/student/createstudent'">Add New Student</button>
+		<h1>Student List</h1>
+		<button onclick="location.href = '/ui/createstudent'">Add New Student</button>
 		<table border="2" width="80%">
 			<thead>
 				<tr>
@@ -307,10 +320,10 @@ SHOW STUDENTS
 					<td th:text="${student.rno}"></td>
 					<td th:text="${student.name}"></td>
 					<td th:text="${student.course}"></td>
-					<td th:text="${student.price}"></td>
+					<td th:text="${student.percentage}"></td>
 					<td>
-						<a th:href="@{/student/updatestudent(rno=${student.rno})}">Edit</a>
-						<a th:href="@{/student/deletestudent(rno=${student.rno})}" onclick="return confirm('Are you sure?')">Delete</a>
+						<a th:href="@{/ui/updatestudent(rno=${student.rno})}">Edit</a>
+						<a th:href="@{/ui/deletestudent(rno=${student.rno})}" onclick="return confirm('Are you sure?')">Delete</a>
 					</td>
 				</tr>
 			</tbody>
@@ -347,7 +360,7 @@ CREATE STUDENT
 				</tr>
 				<tr>
 					<td><button type ="submit">Submit</button></td>
-					<td><a  href="/student/studentList">Cancel</a></td>
+					<td><a  href="/student/showstudent">Cancel</a></td>
 				</tr>
 			</table>
 			
@@ -385,7 +398,7 @@ UPDATE STUDENT
 				</tr>
 				<tr>
 					<td><button type ="submit">Submit</button></td>
-					<td><a  href="/student/studentlist">Cancel</a></td>
+					<td><a  href="/student/showStudents">Cancel</a></td>
 				</tr>
 			</table>
 			
@@ -393,6 +406,7 @@ UPDATE STUDENT
 
 	</body>
 </html>
+
 
 
 
