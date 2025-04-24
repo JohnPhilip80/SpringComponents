@@ -434,3 +434,13 @@ spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=update
 
 
+package com.dsu.john.student.repositories;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.dsu.john.student.models.Student;
+@Repository
+public interface StudentRepositoryDB extends JpaRepository<Student,Long>  {
+
+}
