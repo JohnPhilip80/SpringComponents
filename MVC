@@ -442,5 +442,5 @@ import org.springframework.stereotype.Repository;
 import com.dsu.john.student.models.Student;
 @Repository
 public interface StudentRepositoryDB extends JpaRepository<Student,Long>  {
-	public Student getByRno(Long id);
+	public Student getByRno(Long rno);
 }
